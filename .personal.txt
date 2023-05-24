@@ -1,0 +1,45 @@
+Setup:
+    Console Commands:
+    - `yarn create next-app .`      Imports and Creates nexts folders with boilerplates
+        // `npx create-next-app@12.1.5`     We used this to create the version used in video
+    - `yarn run dev`    This runs the code on localhost. Can also run `yarn dev` (check scripts under "package.json")
+    - `yarn add --dev prettier` 
+    - `yarn add moralis react-moralis`  A Front-end Library
+    - `yarn add web3uikit`
+    - `yarn add moralis-v1`
+    - `yarn global add next`
+    - `yarn add --dev tailwindcss postcss autoprefixer` Source: https://tailwindcss.com/docs/guides/nextjs 
+    - `yarn tailwindcss init -p`
+    - `yarn build`
+    - `yarn next export`
+
+    Extensions:
+    - For Tailwind: https://marketplace.visualstudio.com/items?itemName=csstools.postcss
+    - For Tailwind: https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss
+    Folders & Files:
+    - Create ".prettierrc" & ".prettierignore"
+    - Create "components" folder & "ManualHeader.js" file, then "Header.js" file, then "LotteryEntrance.js" 
+    - Create "constants" folder & "abi.json" and "contractAddresses.json" files
+
+    - Go back to "hardhat=smartcontract-lottery" code file and create a "99-update-front-end.js" file under "deploy" folder
+    - Creat "index.js" under "constants" folder     // To export abi.json and contractAddresses,json directly to LotteryEntrance.js
+
+    Uploading code on browser via IPFS:
+    - IPFS Desktop app download and IPFS browser extension download
+    - Upload "out" folder on IPFS desktop. Then use the CID on browser with "ipfs://___CID___"
+
+Notes:
+
+    - `imports` work with front-ends, `require` does not.
+    - React components are self-contained modules that can be reused throughout an application to create UI elements.
+    - Use {} to write javascript code inside html code blocks
+    - Hooks helps in re-rendering of websites and make it more responsive to each Web3 action
+    - useEffect(() => {}, []);      ie, useEffect(function, optional dependency constantly checked)
+        - No dependancy array: If you don't use dependency here then hook will run anytime something re-renders. Careful with this as it could lead to circular renders.
+        - Blank dependancy array: runs once on load
+    - Using constants folder to modularize deployable chains and make the contract network agnostic, instead of hardcodign the network
+    - Components Library: Web3UiKit; Formatting Library: Tailwind CSS
+
+To-Do:
+
+    - Create a Header / Connect Button / Nav bar 
