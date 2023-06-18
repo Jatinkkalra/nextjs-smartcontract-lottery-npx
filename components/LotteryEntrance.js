@@ -22,7 +22,7 @@ export default function LotteryEntrance() {
   const [numPlayers, setNumPlayers] = useState("0");
   const [recentWinner, setRecentWinner] = useState("0");
 
-  // Notification hook (1/2)
+  // Notification hook (1/3)
   const dispatch = useNotification(); // dispatch will give us a pop-up now
 
   // Creating and hooking `enterLottery` function from backend, ie, hardhat-smartcontract-lottery
@@ -65,10 +65,10 @@ export default function LotteryEntrance() {
   // fetching data and updating it
   async function updateUI() {
     const entranceFeeFromCall = (await getEntranceFee()).toString();
-    const numPlayersFromCall = (await getPlayersNumber()).toString();
+    const numPlayersFromCall = (await getNumberOfPlayers()).toString();
     const recentWinnerFromCall = await getRecentWinner();
     setEntranceFee(entranceFeeFromCall);
-    setNumberOfPlayers(numPlayersFromCall);
+    setNumPlayers(numPlayersFromCall);
     setRecentWinner(recentWinnerFromCall);
   }
 
@@ -78,11 +78,11 @@ export default function LotteryEntrance() {
     }
   }, [isWeb3Enabled]); //starts as false, then checks the local storage and turns isWebEnabled true
 
-  // Notification hook (1/2)
+  // Notification hook (2/3)
   const handleSuccess = async function (tx) {
     await tx.wait(1);
     handleNewNotification(tx);
-    updateUI(); // this part updates/re-renders the "Number of Players" data on frotend with each new entry (without a need of refresh)
+    updateUI(); // this part updates/re-renders the "Number of Players" data on frontend with each new entry (without a need of refresh)
   };
 
   const handleNewNotification = function () {
@@ -98,30 +98,28 @@ export default function LotteryEntrance() {
   return (
     <div className="p-5">
       Hi from Lottery Entrance!
+      {/* A button for "Enter Lottery" */}
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
         onClick={async function () {
           await enterLottery({
-            onSuccess: handleSuccess,
+            onSuccess: handleSuccess, // Notification hook (3/3)  // onSuccess checks if txn has been sent on Metamask; Not if blocks have been mined
             onError: (error) => console.log(error), // add these two params on each run contract function so that we know about error
           });
         }}
         disabled={isLoading || isFetching} // Unability to click button when there is a signing pop-up already
       >
         {isLoading || isFetching ? (
-          <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full">
-            {" "}
-          </div>
+          <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full"></div>
         ) : (
           <div> Enter Lottery </div>
         )}
       </button>
-      {entranceFee}
-      <div>
-        Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH
-      </div>
+      {/* Terninary operator for Lottery Address */}
       {lotteryAddress ? (
         <div>
+          Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH
+          {/* or: `Entrance Fee: {ethers.utils.formatEther(entranceFee)} ETH` */}
           <div>Number Of Players: {numPlayers}</div>
           <div>Recent Winner: {recentWinner}</div>
         </div>
