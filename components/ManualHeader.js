@@ -1,7 +1,7 @@
 // Hard Way (Manual Header)
 
 import { useMoralis } from "react-moralis"; // Hook
-import { useEffect } from "react"; // A core react Hook
+import { useEffect } from "react"; // A core react Hook  // Stays connected even after refresh
 
 export default function ManualHeader() {
   const {
@@ -19,11 +19,11 @@ export default function ManualHeader() {
     if (typeof window !== "undefined") {
       if (window.localStorage.getItem("connected")) {
         enableWeb3();
-      }
+      } // This `if` statement helps in staying connected even after refresh, as long as there is `connected` key item in local storage. Otherwise enableWeb3() will run even after disconnection [aka metamask popup].
     }
   }, [isWeb3Enabled]);
 
-  // No constant metamask pop-up after disconnecting and refreshing (Working without this too though)
+  // Removing the "connected" key item from localstorage once disconnected; To not enableWeb3() on each reload after disconnection [aka metamask popup].
   useEffect(() => {
     Moralis.onAccountChanged((account) => {
       console.log(`Account changed to ${account}`);
@@ -39,22 +39,22 @@ export default function ManualHeader() {
     <div>
       {account ? (
         <div>
-          {" "}
           Connected to {account.slice(0, 6)}....
-          {account.slice(account.length - 4)}{" "}
+          {account.slice(account.length - 4)}
         </div>
       ) : (
         <button
           onClick={async () => {
             await enableWeb3();
-            if (typeof window !== "undefined")
-              window.localStorage.setItem("connected", "injected"); // storing the connection in browser's local storage (to not have constant metamask pop-ups for connection)
+            if (typeof window !== "undefined") {
+              window.localStorage.setItem("connected", "injected");
+            } // storing the connection in browser's local storage (for useEffect() above)
           }}
           disabled={isWeb3EnableLoading} // Making connect button un-clickable once metamask is popped-up
         >
           Connect
         </button>
-      )}{" "}
+      )}
       {/* ternary operator: condition ? expression1 : expression2 */}
     </div>
   );

@@ -23,11 +23,25 @@
 
 # Overview
 
-##
+## Components
 
-### Steps:
+### ManualHeader.js
 
-##
+Manual Way to write the Header, Connect Button.
+
+- `yarn run dev` to run the frontend code on web localhost.
+- useMoralis and useEffect hooks are used, along with HTML.
+
+### Header.js
+
+Easy way to write the Header, Connect Button. We also connect it to Lottery Contract.
+
+- Install web3uikit: `yarn add web3uikit`
+- cd to \hardhat-smartcontract-lottery in console, and run the node: `yarn hardhat node`
+- Create "constants" folder and files underneath. Add `{}` to each .json file. // The content inside will be updated by the backend file. 
+- Use `yarn hardhat node` in backend file to update "abi.json" &
+ "contractAddresses.json" file in the frontend.
+
 
 ### Steps:
 
@@ -99,17 +113,18 @@
 # Notes
 
 - `imports` work with front-ends, `require` does not.
-- "./index.js" (under "./pages" folder) is the default homepage of our website.
-- "./\_app.js" wraps all other pages. You can think of it as the whole appilcation or whole frontend.
+- **"./index.js"** (under "./pages" folder) is the default homepage of our website.
+- **"./\_app.js"** wraps all other pages. You can think of it as the whole appilcation or whole frontend.
 - Use `{ Example }` to write javascript code inside html code blocks.
 - **React components** are self-contained modules that can be reused throughout an application to create UI elements.
 - **Hooks** helps in re-rendering of websites and make it more responsive to each Web3 action. It's a way to keep track of state in our application.
 - **Components Library**: Web3UiKit; Formatting Library: Tailwind CSS
 - ![ManualHeader.js -> `UseMoralis()` variables](./img/image.png)
-- useEffect(() => {}, []); // ie, useEffect(function, optional dependency constantly checked)
+- **useEffect(() => {}, [])**; // ie, useEffect(() => {function}, [optional dependency constantly checked])
   - No dependancy array: If you don't use dependency here then hook will run anytime something re-renders. Careful with this as it could lead to circular renders.
   - Blank dependancy array: runs once on load
-- Using constants folder to modularize deployable chains and make the contract network agnostic, instead of hardcoding the network
+- Using **constants folder** to modularize deployable chains and make the contract network agnostic, instead of hardcoding the network
+- **ABI** always remain the same, no matter which network we are on.
 
 # To-Do
 
@@ -125,4 +140,4 @@
 
 # References
 
--
+- useWeb3Contract() function for Header.js: https://github.com/MoralisWeb3/react-moralis#useweb3contract

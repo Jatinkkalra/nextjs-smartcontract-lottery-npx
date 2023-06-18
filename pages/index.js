@@ -14,12 +14,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* ---------- mostly boiler plate above ------------*/}
-      
+
       {/* header / connect button / nav bar */}
       {/* <ManualHeader></ManualHeader> */}
-     
+
       <Header></Header>
-      Hello!
       <LotteryEntrance />
     </div>
   );

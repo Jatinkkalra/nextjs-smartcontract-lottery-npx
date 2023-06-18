@@ -35,8 +35,8 @@ export default function LotteryEntrance() {
     contractAddress: lotteryAddress, // networkId / chainId will change at 0 with frontend change (likely)
     functionName: "enterLottery",
     params: {},
-    msgValue: entranceFee,
-  });
+    msgValue: entranceFee, // enterLottery() doesn't take any paramaters, rather it only takes msg.value as input
+  }); // Syntax: https://github.com/MoralisWeb3/react-moralis#useweb3contract
 
   // Calling `getEntranceFee` function from backend, ie, hardhat-smartcontract-lottery
   const { runContractFunction: getEntranceFee } = useWeb3Contract({
