@@ -2,9 +2,9 @@
 // 1. Have a function to call(enter) the lottery
 
 import { useWeb3Contract } from "react-moralis";
-import { abi, contractAddresses } from "../constants"; // specifying folder as index.js represents the whole folder
+import { abi, contractAddresses } from "../constants"; // specifying folder instead of files as index.js represents the whole folder. Other way: `import abi from "../constants/abi.json"`
 import { useMoralis } from "react-moralis"; // hook
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"; // core hooks
 import { ethers } from "ethers";
 import { useNotification } from "@web3uikit/core"; // hook
 
@@ -12,10 +12,10 @@ export default function LotteryEntrance() {
   // For `enterLottery` function
   const { chainId: chainIdHex, isWeb3Enabled } = useMoralis(); // by default the chainId returns a Hex version. Renaming here for clarity
   console.log(parseInt(chainIdHex));
-
   const chainId = parseInt(chainIdHex);
+
   const lotteryAddress =
-    chainId in contractAddresses ? contractAddresses[chainId][0] : null;
+    chainId in contractAddresses ? contractAddresses[chainId][0] : null; // Specifying the chainId along with the contractAddress
 
   // For `getEntranceFee`, `getNumberOfPlayers` and `getRecentWinner" functions || State Hook (useState) which re-renders the state
   const [entranceFee, setEntranceFee] = useState("0"); //entranceFee starts with 0 and setEntranceFee updates the fee
@@ -25,7 +25,7 @@ export default function LotteryEntrance() {
   // Notification hook (1/2)
   const dispatch = useNotification(); // dispatch will give us a pop-up now
 
-  // Calling `enterLottery` function from backend, ie, hardhat-smartcontract-lottery
+  // Creating and hooking `enterLottery` function from backend, ie, hardhat-smartcontract-lottery
   const {
     runContractFunction: enterLottery,
     isLoading,
@@ -38,7 +38,7 @@ export default function LotteryEntrance() {
     msgValue: entranceFee, // enterLottery() doesn't take any paramaters, rather it only takes msg.value as input
   }); // Syntax: https://github.com/MoralisWeb3/react-moralis#useweb3contract
 
-  // Calling `getEntranceFee` function from backend, ie, hardhat-smartcontract-lottery
+  // Creating and hooking `getEntranceFee` function from backend, ie, hardhat-smartcontract-lottery
   const { runContractFunction: getEntranceFee } = useWeb3Contract({
     abi: abi,
     contractAddress: lotteryAddress, // networkId / chainId will change at 0 with frontend change (likely)
@@ -46,7 +46,7 @@ export default function LotteryEntrance() {
     params: {},
   });
 
-  // Calling `getNumberOfPlayers` function from backend, ie, hardhat-smartcontract-lottery
+  // Creating and hooking `getNumberOfPlayers` function from backend, ie, hardhat-smartcontract-lottery
   const { runContractFunction: getNumberOfPlayers } = useWeb3Contract({
     abi: abi,
     contractAddress: lotteryAddress, // networkId / chainId will change at 0 with frontend change (likely)
@@ -54,7 +54,7 @@ export default function LotteryEntrance() {
     params: {},
   });
 
-  // Calling `getRecentWinner` function from backend, ie, hardhat-smartcontract-lottery
+  // Creating and hooking `getRecentWinner` function from backend, ie, hardhat-smartcontract-lottery
   const { runContractFunction: getRecentWinner } = useWeb3Contract({
     abi: abi,
     contractAddress: lotteryAddress, // networkId / chainId will change at 0 with frontend change (likely)
@@ -65,14 +65,11 @@ export default function LotteryEntrance() {
   // fetching data and updating it
   async function updateUI() {
     const entranceFeeFromCall = (await getEntranceFee()).toString();
-    const numPlayersFromCall = (await getNumberOfPlayers()).toString();
-    const recentWinnerFromCall = (await getRecentWinner()).toString();
-
+    const numPlayersFromCall = (await getPlayersNumber()).toString();
+    const recentWinnerFromCall = await getRecentWinner();
     setEntranceFee(entranceFeeFromCall);
-    setNumPlayers(numPlayersFromCall);
+    setNumberOfPlayers(numPlayersFromCall);
     setRecentWinner(recentWinnerFromCall);
-
-    console.log(`entrance fee is ${entranceFee}`);
   }
 
   useEffect(() => {
@@ -101,29 +98,30 @@ export default function LotteryEntrance() {
   return (
     <div className="p-5">
       Hi from Lottery Entrance!
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
+        onClick={async function () {
+          await enterLottery({
+            onSuccess: handleSuccess,
+            onError: (error) => console.log(error), // add these two params on each run contract function so that we know about error
+          });
+        }}
+        disabled={isLoading || isFetching} // Unability to click button when there is a signing pop-up already
+      >
+        {isLoading || isFetching ? (
+          <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full">
+            {" "}
+          </div>
+        ) : (
+          <div> Enter Lottery </div>
+        )}
+      </button>
+      {entranceFee}
+      <div>
+        Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH
+      </div>
       {lotteryAddress ? (
         <div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
-            onClick={async function () {
-              await enterLottery({
-                onSuccess: handleSuccess,
-                onError: (error) => console.log(error), // add these two params on each run contract function so that we know about error
-              });
-            }}
-            disabled={isLoading || isFetching} // Unability to click button when there is a signing pop-up already
-          >
-            {isLoading || isFetching ? (
-              <div className="animate-spin spinner-border h-8 w-8 border-b-2 rounded-full">
-                {" "}
-              </div>
-            ) : (
-              <div> Enter Lottery </div>
-            )}
-          </button>
-          <div>
-            Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH
-          </div>
           <div>Number Of Players: {numPlayers}</div>
           <div>Recent Winner: {recentWinner}</div>
         </div>
