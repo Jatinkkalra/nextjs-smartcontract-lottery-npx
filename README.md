@@ -3,27 +3,24 @@
 ## Table Of Content
 
 - [Overview](#overview)
-  - [](#)
-    - [Steps:](#steps)
-  - [](#-1)
-    - [Steps:](#steps-1)
-  - [](#-2)
-    - [Steps:](#steps-2)
+  - [Components Folder](#components-folder)
+    - [ManualHeader.js](#manualheaderjs)
+    - [Header.js](#headerjs)
   - [Extensions](#extensions)
   - [Console Setup Commands](#console-setup-commands)
   - [Create Folders and Files](#create-folders-and-files)
   - [Uploading code on browser via IPFS:](#uploading-code-on-browser-via-ipfs)
-  - [Console Command Prompts:](#console-command-prompts)
-  - [Import:](#import)
 - [Notes](#notes)
-- [To-Do](#to-do)
   - [Error Handling](#error-handling)
     - [Solution:](#solution)
 - [References](#references)
 
 # Overview
 
-## Components
+A full-stack demo of a Lottery smart contract.
+Switch to a local chain and try it out here: 
+
+## Components Folder
 
 ### ManualHeader.js
 
@@ -41,12 +38,16 @@ Easy way to write the Header, Connect Button. We also connect it to Lottery Cont
 - Create "constants" folder and files underneath. Add `{}` to each .json file. // The content inside will be updated by the backend file.
 - Use `yarn hardhat node` in backend file to update "abi.json" &
   "contractAddresses.json" file in the frontend.
+- Follow https://tailwindcss.com/docs/guides/nextjs for Installing Tailwind:
+  - `yarn add --dev tailwindcss postcss autoprefixer` // creates "./styles" folder
+  - ` yarn tailwindcss init -p` // creates "./postcss.config.js" and "./tailwind.config.js" files
+  - Install Tailwind Extensions in VSCode: [Extensions](#extensions)
+  - `yarn run dev`
+  - **Note**: For CSS to take effect: Kill the frontend and run `yarn run dev` again
 
-### Steps:
+# Setup
 
-##
-
-### Steps:
+Below is a quick summary of the steps I used to write this repo. Mainly for personal reference only.
 
 ## Extensions
 
@@ -65,7 +66,9 @@ Easy way to write the Header, Connect Button. We also connect it to Lottery Cont
 `yarn add moralis-v1` //
 `yarn global add next` //
 `yarn add --dev tailwindcss postcss autoprefixer` // Source: https://tailwindcss.com/docs/guides/nextjs
-`yarn tailwindcss init -p``yarn build``yarn next export`;
+`yarn tailwindcss init -p` //
+`yarn build` //
+`yarn next export`;
 ```
 
 ## Create Folders and Files
@@ -85,29 +88,25 @@ Easy way to write the Header, Connect Button. We also connect it to Lottery Cont
 - Go back to "hardhat-smartcontract-lottery" workspace and create:
   - "99-update-front-end.js" file under "deploy" folder
 
-## Uploading code on browser via IPFS:
+> _**Note**: Rest folders/files will be automatically created by the dependencies._
+
+## Uploading front-end code on browser via IPFS:
 
 - Download:
   - IPFS Desktop app
   - IPFS browser extension
 - Upload:
-  - "out" folder on IPFS desktop.
+  - "out" folder on IPFS desktop. // Created after using `yarn build` & `yarn next export`
 
 > Then try the CID on browser with "ipfs://**_CID_**"
 
-> _**Note**: Rest folders/files will be automatically created by the dependencies._
+## Uploading front-end code on browser via Fleek:
 
-## Console Command Prompts:
+- Connect fleek to Github, and select the frontend repo.
+- Basic Build Settings
+  - "Docker Image Name" text box imput:  `node:lts`
+  - "Build Command" text box input: `yarn && yarn run build && yarn next export`
 
-- ``
-
-  >
-
-## Import:
-
-```js
--
-```
 
 # Notes
 
@@ -135,17 +134,18 @@ Easy way to write the Header, Connect Button. We also connect it to Lottery Cont
 
   Overall, the `entranceFee` is fetched and updated by calling the `getEntranceFee` function, updating the state using the `setEntranceFee` function, and displaying the formatted value in the component's JSX markup.
 
-# To-Do
-
-- Create a Header / Connect Button / Nav bar
-
 ## Error Handling
 
-```js
+Error faced when you click on "Enter Lottery" button. Txn gets passed but winner doesn't get selected.
 
+```js
+    Error: Transaction reverted: function selector was not recognized and there's no fallback function
+      at Lottery.<unrecognized-selector> (contracts/lottery.sol:38)
 ```
 
 ### Solution:
+
+Using second private key of hardhat: https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/302
 
 # References
 

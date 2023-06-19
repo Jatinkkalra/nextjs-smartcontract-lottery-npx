@@ -97,7 +97,9 @@ export default function LotteryEntrance() {
 
   return (
     <div className="p-5">
-      Hi from Lottery Entrance!
+      <div>Hi from Lottery Entrance!</div>
+      <div className="pb-10"> 👉 Note: Switch to a local chain to test out the Lottery Contract. 🙏 </div>
+
       {/* A button for "Enter Lottery" */}
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
@@ -120,8 +122,9 @@ export default function LotteryEntrance() {
         <div>
           Entrance Fee: {ethers.utils.formatUnits(entranceFee, "ether")} ETH
           {/* or: `Entrance Fee: {ethers.utils.formatEther(entranceFee)} ETH` */}
-          <div>Number Of Players: {numPlayers}</div>
+          <div className="pt-4">Number of Players: {numPlayers}</div>
           <div>Recent Winner: {recentWinner}</div>
+
         </div>
       ) : (
         <div>No Lottery Address Detected</div>
