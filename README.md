@@ -18,7 +18,7 @@
 # Overview
 
 A full-stack demo of a Lottery smart contract.
-Switch to a local chain and try it out here: 
+Switch to a local chain and try it out here: https://orange-heart-2461.on.fleek.co/
 
 ## Components Folder
 
